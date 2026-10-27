@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TruthLens – AI Fake News Detector</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🔍 <span>TruthLens</span> <small>AI Fake News &amp; Misinformation Detector</small></div>
+    <nav>
+      <button class="tab active" data-tab="analyze">Analyze</button>
+      <button class="tab" data-tab="history">History</button>
+      <button class="tab" data-tab="stats">Dashboard</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ANALYZE -->
+    <section id="tab-analyze" class="panel active">
+      <div class="card">
+        <h2>Check a news article or claim</h2>
+        <div class="mode-switch">
+          <label><input type="radio" name="mode" value="text" checked /> Paste text</label>
+          <label><input type="radio" name="mode" value="url" /> Article link</label>
+        </div>
+        <textarea id="inputText" rows="8" placeholder="Paste a headline, a WhatsApp forward or a full article here…"></textarea>
+        <input id="inputUrl" type="text" placeholder="https://example.com/news/article" class="hidden" />
+        <div class="row">
+          <button id="analyzeBtn" class="primary">Analyze</button>
+          <button id="sampleFake" class="ghost">Try a fake sample</button>
+          <button id="sampleReal" class="ghost">Try a real sample</button>
+          <span id="charCount" class="muted"></span>
+        </div>
+        <p id="error" class="error hidden"></p>
+      </div>
+
+      <div id="result" class="card hidden">
+        <div class="result-head">
+          <div class="gauge" id="gauge"><span id="gaugeNum">0</span><small>credibility</small></div>
+          <div>
+            <div id="verdict" class="verdict"></div>
+            <div class="muted" id="probLine"></div>
+            <div class="muted" id="sourceLine"></div>
+          </div>
+        </div>
+        <div class="bar"><div id="fakeBar" class="bar-fake"></div><div id="realBar" class="bar-real"></div></div>
+        <div class="legend"><span class="dot fake"></span>Fake <span id="fakePct"></span> <span class="dot real"></span>Real <span id="realPct"></span></div>
+
+        <div class="grid2">
+          <div>
+            <h3>Why this verdict?</h3>
+            <ul id="signals" class="signals"></ul>
+          </div>
+          <div>
+            <h3>Words that influenced the model</h3>
+            <div id="termsFake" class="chips"></div>
+            <div id="termsReal" class="chips"></div>
+          </div>
+        </div>
+
+        <div class="feedback">
+          <span class="muted">Was this verdict correct? Help improve the model:</span>
+          <button class="ghost" data-fb="fake">It's fake</button>
+          <button class="ghost" data-fb="real">It's real</button>
+          <span id="fbMsg" class="muted"></span>
+        </div>
+        <p class="disclaimer">⚠️ AI predictions can be wrong. Always verify with trusted fact-checkers and original sources.</p>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="tab-history" class="panel">
+      <div class="card">
+        <div class="row between">
+          <h2>Past analyses</h2>
+          <select id="filterVerdict">
+            <option value="">All verdicts</option>
+            <option>Likely Fake</option>
+            <option>Likely Real</option>
+            <option>Uncertain</option>
+          </select>
+        </div>
+        <div id="historyList" class="history"></div>
+        <p id="historyEmpty" class="muted hidden">Nothing here yet — analyze something first.</p>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section id="tab-stats" class="panel">
+      <div class="cards4">
+        <div class="stat"><b id="sTotal">0</b><span>Total checks</span></div>
+        <div class="stat fake"><b id="sFake">0</b><span>Likely fake</span></div>
+        <div class="stat real"><b id="sReal">0</b><span>Likely real</span></div>
+        <div class="stat"><b id="sAvg">0</b><span>Avg credibility</span></div>
+      </div>
+      <div class="card">
+        <h2>Last 7 days</h2>
+        <canvas id="chart" height="180"></canvas>
+      </div>
+      <div class="card">
+        <h2>Model</h2>
+        <p class="muted" id="modelInfo"></p>
+        <button id="retrainBtn" class="ghost">Retrain with user feedback</button>
+        <span id="retrainMsg" class="muted"></span>
+      </div>
+    </section>
+  </main>
+
+  <footer>Built with FastAPI · scikit-learn · SQLite · Vanilla JS</footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>
